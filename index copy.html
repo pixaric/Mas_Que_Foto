@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mas Que Foto - Estudio Fotográfico</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- React y Babel para ejecutar JSX en el navegador -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .grayscale { filter: grayscale(100%); }
+    </style>
+</head>
+<body class="bg-white text-black selection:bg-black selection:text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        const App = () => {
+            const [isMenuOpen, setIsMenuOpen] = useState(false);
+            const [files, setFiles] = useState([]);
+            const [isUploading, setIsUploading] = useState(false);
+            const [uploadStatus, setUploadStatus] = useState(null);
+
+            // Inicializar iconos de Lucide después del renderizado
+            useEffect(() => {
+                lucide.createIcons();
+            }, [isMenuOpen, uploadStatus, files]);
+
+            const handleFileUpload = (e) => {
+                const selectedFiles = Array.from(e.target.files);
+                setFiles(selectedFiles);
+                setUploadStatus(null);
+            };
+
+            const simulateUpload = () => {
+                if (files.length === 0) return;
+                setIsUploading(true);
+                setTimeout(() => {
+                    setIsUploading(false);
+                    setUploadStatus('success');
+                    setFiles([]);
+                }, 2500);
+            };
+
+            const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+            return (
+                <div className="min-h-screen">
+                    {/* Navigation */}
+                    <nav className="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+                        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+                            <div className="flex items-center space-x-2">
+                                <i data-lucide="camera" className="w-7 h-7"></i>
+                                <span className="text-xl font-bold tracking-tighter uppercase">Mas Que Foto</span>
+                            </div>
+
+                            <div className="hidden md:flex space-x-10 text-sm font-medium uppercase tracking-widest">
+                                <a href="#inicio" className="hover:opacity-50 transition-opacity">Inicio</a>
+                                <a href="#servicios" className="hover:opacity-50 transition-opacity">Servicios</a>
+                                <a href="#subir" className="hover:opacity-50 transition-opacity">Enviar Archivos</a>
+                                <a href="#contacto" className="hover:opacity-50 transition-opacity">Contacto</a>
+                            </div>
+
+                            <button className="md:hidden" onClick={toggleMenu}>
+                                <i data-lucide={isMenuOpen ? "x" : "menu"}></i>
+                            </button>
+                        </div>
+
+                        {isMenuOpen && (
+                            <div className="md:hidden bg-white border-b border-gray-100 p-6 flex flex-col space-y-4 text-center font-medium uppercase tracking-widest text-sm">
+                                <a href="#inicio" onClick={toggleMenu}>Inicio</a>
+                                <a href="#servicios" onClick={toggleMenu}>Servicios</a>
+                                <a href="#subir" onClick={toggleMenu}>Enviar Archivos</a>
+                                <a href="#contacto" onClick={toggleMenu}>Contacto</a>
+                            </div>
+                        )}
+                    </nav>
+
+                    {/* Hero Section */}
+                    <section id="inicio" className="pt-40 pb-20 px-6">
+                        <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+                            <div>
+                                <h1 className="text-6xl md:text-8xl font-black leading-none mb-6 tracking-tighter">
+                                    CAPTURA EL <br /> MOMENTO.
+                                </h1>
+                                <p className="text-lg text-gray-600 max-w-md mb-8 leading-relaxed">
+                                    En Mas Que Foto no solo tomamos imágenes, preservamos historias con una estética minimalista y profesional.
+                                </p>
+                                <a href="#subir" className="inline-flex items-center space-x-3 bg-black text-white px-8 py-4 rounded-full hover:bg-gray-800 transition-all group">
+                                    <span>Subir mis fotos</span>
+                                    <i data-lucide="arrow-right" className="w-5 h-5 group-hover:translate-x-1 transition-transform"></i>
+                                </a>
+                            </div>
+                            <div className="relative">
+                                <div className="aspect-[4/5] bg-gray-100 rounded-2xl overflow-hidden relative">
+                                    <img 
+                                        src="https://images.unsplash.com/photo-1493863641943-9b68992a8d07?auto=format&fit=crop&q=80&w=800" 
+                                        alt="Fotografía artística en blanco y negro"
+                                        className="object-cover w-full h-full grayscale"
+                                    />
+                                    <div className="absolute inset-0 ring-1 ring-inset ring-black/10 rounded-2xl"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Servicios Section */}
+                    <section id="servicios" className="py-20 bg-gray-50 px-6">
+                        <div className="max-w-7xl mx-auto text-center mb-16">
+                            <h2 className="text-3xl font-bold uppercase tracking-widest mb-4">Nuestra Esencia</h2>
+                            <div className="h-1 w-20 bg-black mx-auto"></div>
+                        </div>
+                        <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
+                            <div className="bg-white p-10 border border-gray-100 hover:border-black transition-colors">
+                                <i data-lucide="image" className="w-8 h-8 mb-6"></i>
+                                <h3 className="text-xl font-bold mb-4 uppercase tracking-tight">Digitalización</h3>
+                                <p className="text-gray-500">Convertimos tus negativos y fotos antiguas a la mejor calidad digital.</p>
+                            </div>
+                            <div className="bg-white p-10 border border-gray-100 hover:border-black transition-colors">
+                                <i data-lucide="camera" className="w-8 h-8 mb-6"></i>
+                                <h3 className="text-xl font-bold mb-4 uppercase tracking-tight">Sesiones</h3>
+                                <p className="text-gray-500">Retratos profesionales en estudio con iluminación cinematográfica.</p>
+                            </div>
+                            <div className="bg-white p-10 border border-gray-100 hover:border-black transition-colors">
+                                <i data-lucide="info" className="w-8 h-8 mb-6"></i>
+                                <h3 className="text-xl font-bold mb-4 uppercase tracking-tight">Edición</h3>
+                                <p className="text-gray-500">Retoque artístico manteniendo la naturalidad de cada captura.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Upload Section */}
+                    <section id="subir" className="py-24 px-6">
+                        <div className="max-w-3xl mx-auto">
+                            <div className="text-center mb-12">
+                                <h2 className="text-4xl font-black uppercase tracking-tighter mb-4">Envío de Archivos</h2>
+                                <p className="text-gray-600">Sube tus fotos directamente para procesado o impresión.</p>
+                            </div>
+
+                            <div className={`border-2 border-dashed rounded-3xl p-12 text-center transition-all ${files.length > 0 ? 'border-black bg-gray-50' : 'border-gray-200'}`}>
+                                {!uploadStatus ? (
+                                    <>
+                                        <div className="mb-6 flex justify-center">
+                                            <div className="w-16 h-16 bg-black text-white rounded-full flex items-center justify-center">
+                                                <i data-lucide="upload" className="w-7 h-7"></i>
+                                            </div>
+                                        </div>
+                                        <input 
+                                            type="file" 
+                                            id="file-input" 
+                                            className="hidden" 
+                                            multiple 
+                                            onChange={handleFileUpload}
+                                            accept="image/*"
+                                        />
+                                        <label htmlFor="file-input" className="cursor-pointer text-xl font-bold hover:underline block mb-2">
+                                            {files.length > 0 ? `${files.length} archivos seleccionados` : 'Haz clic para seleccionar archivos'}
+                                        </label>
+                                        <p className="text-gray-400 text-sm mb-8">Formatos admitidos: JPG, PNG, RAW</p>
+                                        
+                                        {files.length > 0 && (
+                                            <button 
+                                                onClick={simulateUpload}
+                                                disabled={isUploading}
+                                                className={`w-full py-4 rounded-xl font-bold uppercase tracking-widest transition-all ${isUploading ? 'bg-gray-200 cursor-not-allowed text-gray-400' : 'bg-black text-white hover:bg-gray-800'}`}
+                                            >
+                                                {isUploading ? 'Subiendo...' : 'Iniciar Carga'}
+                                            </button>
+                                        )}
+                                    </>
+                                ) : (
+                                    <div className="py-10">
+                                        <div className="mb-6 flex justify-center text-green-600">
+                                            <i data-lucide="check-circle" className="w-16 h-16"></i>
+                                        </div>
+                                        <h3 className="text-2xl font-bold mb-2">¡Archivos Recibidos!</h3>
+                                        <p className="text-gray-500 mb-8">Tus fotos han sido enviadas correctamente a nuestra unidad de almacenamiento.</p>
+                                        <button onClick={() => setUploadStatus(null)} className="text-black font-bold uppercase tracking-widest hover:underline">
+                                            Subir más archivos
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+                    </section>
+
+                    {/* Footer */}
+                    <footer id="contacto" className="bg-black text-white py-20 px-6">
+                        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start space-y-12 md:space-y-0">
+                            <div>
+                                <div className="flex items-center space-x-2 mb-6">
+                                    <i data-lucide="camera" className="w-8 h-8"></i>
+                                    <span className="text-2xl font-bold tracking-tighter uppercase">Mas Que Foto</span>
+                                </div>
+                                <p className="text-gray-400 max-w-xs mb-8">
+                                    Estudio creativo enfocado en la fotografía de autor y servicios digitales de alta gama.
+                                </p>
+                                <div className="flex space-x-6 text-sm">
+                                    <a href="#" className="hover:text-gray-400 transition-colors underline decoration-gray-800">Instagram</a>
+                                    <a href="#" className="hover:text-gray-400 transition-colors underline decoration-gray-800">LinkedIn</a>
+                                </div>
+                            </div>
+                            
+                            <div className="grid grid-cols-2 gap-20">
+                                <div>
+                                    <h4 className="font-bold uppercase tracking-widest mb-6 text-sm">Legal</h4>
+                                    <ul className="space-y-4 text-gray-400 text-sm">
+                                        <li>Privacidad</li>
+                                        <li>Términos</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 className="font-bold uppercase tracking-widest mb-6 text-sm">Contacto</h4>
+                                    <ul className="space-y-4 text-gray-400 text-sm">
+                                        <li className="flex items-center space-x-2">
+                                            <i data-lucide="mail" className="w-4 h-4"></i>
+                                            <span>hola@masquefoto.com</span>
+                                        </li>
+                                        <li>Madrid, España</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
